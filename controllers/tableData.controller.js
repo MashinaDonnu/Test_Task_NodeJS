@@ -4,10 +4,10 @@ const db = require('../db')
 const {generateValues} = require('../handlers')
 
 
-const url = 'https://www.worldometers.info/coronavirus/#countries'
 
 class TableDataController {
     async getTableContent() {
+        const url = 'https://www.worldometers.info/coronavirus/#countries'
         const response = await axios.get(url)
         const content = response.data
         const $ = await cheerio.load(content)
@@ -54,7 +54,6 @@ class TableDataController {
             db.query(`INSERT INTO data_table (${fields.join(',')}) VALUES(${insertItems})`, row)
         })
     }
-
 
     async getCountryStatistics(code) {
         try {

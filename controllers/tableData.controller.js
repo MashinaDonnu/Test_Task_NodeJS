@@ -3,9 +3,8 @@ const cheerio = require('cheerio')
 const db = require('../db')
 const {generateValues} = require('../handlers')
 
-
-
 class TableDataController {
+    // Метод для парсинга таблицы
     async getTableContent() {
         const url = 'https://www.worldometers.info/coronavirus/#countries'
         const response = await axios.get(url)
@@ -28,7 +27,7 @@ class TableDataController {
         })
         return tableData
     }
-
+    // Медод сохранения данных в локальную базу данных
     async setDataInDB() {
         db.query('DELETE FROM data_table')
         const tableData = await this.getTableContent()
@@ -55,6 +54,7 @@ class TableDataController {
         })
     }
 
+    // Метод получения статистики по коду страны
     async getCountryStatistics(code) {
         try {
             if (code.trim()) {

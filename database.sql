@@ -1,4 +1,4 @@
-create TABLE data_table (
+CREATE TABLE data_table (
     id SERIAL PRIMARY KEY,
     country VARCHAR(255),
     total_cases VARCHAR(255),
@@ -13,4 +13,12 @@ create TABLE data_table (
     total_tests VARCHAR(255),
     tests_1m_pop VARCHAR(255),
     population VARCHAR(255)
+);
+
+create TABLE users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255),
+    last_name VARCHAR(255),
+    phone INTEGER,
+    countries VARCHAR(255)[]
 );

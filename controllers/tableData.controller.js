@@ -1,10 +1,10 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
 const db = require('../db')
+const {generateValues} = require('../handlers')
 
 
 const url = 'https://www.worldometers.info/coronavirus/#countries'
-
 
 class TableDataController {
     async getTableContent() {
@@ -26,7 +26,6 @@ class TableDataController {
                 tableData.push(tableDataItem)
             }
         })
-
         return tableData
     }
 
@@ -34,7 +33,6 @@ class TableDataController {
         db.query('DELETE FROM data_table')
         const tableData = await this.getTableContent()
         const fields = [
-            // 'id',
             'country',
             'total_cases',
             'new_cases',
@@ -49,12 +47,7 @@ class TableDataController {
             'tests_1m_pop',
             'population',
         ]
-
-        const insertItems = fields.reduce((acc, _, i) => {
-            let s = '$' + (i + 1)
-            acc.push(s)
-            return acc
-        }, []).join(',')
+        const insertItems = generateValues(fields.length)
         console.log(insertItems)
 
         tableData.forEach( row => {
@@ -62,8 +55,16 @@ class TableDataController {
         })
     }
 
-    async getCountryStatistics(req, res) {
 
+    async getCountryStatistics(code) {
+        try {
+            if (code.trim()) {
+                const statistics = await db.query(`SELECT * FROM data_table WHERE country='${code}' LIMIT 1`)
+                return statistics.rows[0]
+            }
+        } catch (e) {
+            throw new Error(e)
+        }
     }
 }
 
